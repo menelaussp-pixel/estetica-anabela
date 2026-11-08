@@ -140,6 +140,7 @@ async function arrancar() {
   await carregarMarcacoes();
   carregarBloqueios();
   ligarRealtime();
+  sincronizarPush();
 }
 
 // ---------------------------------------------------------------------
@@ -173,22 +174,10 @@ $('sino').addEventListener('click', () => {
 function ligarRealtime() {
   if (app.canal) return;
   app.canal = sb.channel('marcacoes-painel')
-    .on('postgres_changes', { event: '*', schema: 'public', table: 'marcacoes' }, (payload) => {
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'marcacoes' }, () => {
       carregarMarcacoes();
-      if (payload.eventType === 'INSERT') {
-        try { new Audio('data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA==').play(); } catch {}
-        if ('Notification' in window && Notification.permission === 'granted') {
-          new Notification('Nova marcação', {
-            body: `${payload.new.nome} — ${dataDe(payload.new.inicio)} às ${horaDe(payload.new.inicio)}`,
-          });
-        }
-      }
     })
     .subscribe();
-
-  if ('Notification' in window && Notification.permission === 'default') {
-    Notification.requestPermission();
-  }
 }
 
 // ---------------------------------------------------------------------

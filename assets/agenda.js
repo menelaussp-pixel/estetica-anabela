@@ -312,6 +312,10 @@ function mostrarVistaMarc(vista) {
     b.setAttribute('aria-selected', String(b.dataset.vista === vista)));
   $('vistaCalendario').hidden = vista !== 'calendario';
   $('vistaGeral').hidden = vista !== 'geral';
+  if (vista === 'calendario') {
+    agenda.irParaHoje = true;
+    carregarAgenda();
+  }
 }
 
 function mudarModo(modo) {

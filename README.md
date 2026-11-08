@@ -90,8 +90,12 @@ marcações, mesmo mexendo na consola do browser: essas tabelas não têm polít
 pública. Só vê serviços, horários e os avisos.
 
 **Tempo real.** O painel subscreve a tabela `marcacoes` por websocket. Uma marcação nova
-aparece sozinha, sem recarregar e sem polling. Com o painel aberto no telemóvel e as
-notificações autorizadas, aparece também um aviso do browser.
+aparece sozinha, sem recarregar e sem polling.
+
+**Notificações.** Em **Perfil → Notificações neste dispositivo**, a dona ativa os avisos no
+telemóvel. Usam a norma Web Push, sem bibliotecas nem contas externas: quando entra uma
+marcação, a base de dados chama a função `notificar-marcacao`, que encripta o aviso e o
+entrega através do serviço de push do próprio navegador, mesmo com o painel fechado.
 
 **WhatsApp.** Os botões abrem o WhatsApp com a mensagem já escrita, através dos links
 oficiais `wa.me`. É preciso tocar em enviar — é de propósito. Envio automático obriga à
@@ -128,6 +132,7 @@ envio automático grátis são não-oficiais e dão banimento do número.
 index.html              site dos clientes
 painel.html             painel da dona
 manifest.json           para instalar no telemóvel
+sw.js                   mostra as notificações
 assets/
   config.js             <<< os dados do Supabase vão aqui
   estilo.css
@@ -135,7 +140,10 @@ assets/
   cliente.js
   painel.js
   agenda.js             calendário do painel (dia, semana, mês)
+  push.js               ativar as notificações no dispositivo
 supabase/
   01_schema.sql         tabelas, segurança (RLS) e funções
   02_dados.sql          serviços, horários e avisos iniciais
+  03_push.sql           tabela e gatilho das notificações
+  functions/notificar-marcacao/   envia as notificações
 ```

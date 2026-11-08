@@ -51,11 +51,11 @@
     <!-- ---------------- MARCAÇÕES ---------------- -->
     <section class="pagina ativa" id="pgMarcacoes">
       <div class="seps" role="tablist" style="margin:16px 0 10px">
-        <button class="sep" role="tab" aria-selected="false" data-vista="geral">Visão geral</button>
-        <button class="sep" role="tab" aria-selected="true" data-vista="calendario">Calendário</button>
+        <button class="sep" role="tab" aria-selected="true" data-vista="geral">Visão geral</button>
+        <button class="sep" role="tab" aria-selected="false" data-vista="calendario">Calendário</button>
       </div>
 
-      <div id="vistaCalendario">
+      <div id="vistaCalendario" hidden>
         <div class="seps" role="tablist" style="margin:0 0 12px">
           <button class="sep" role="tab" aria-selected="false" data-modo="dia">Dia</button>
           <button class="sep" role="tab" aria-selected="true" data-modo="semana">Semana</button>
@@ -74,7 +74,7 @@
         </div>
       </div>
 
-      <div id="vistaGeral" hidden>
+      <div id="vistaGeral">
       <div class="campo">
         <select id="periodo">
           <option value="hoje">Hoje</option>
@@ -187,6 +187,13 @@
       </div>
 
       <div class="cartao">
+        <div class="cartao__titulo">Notificações neste dispositivo</div>
+        <p style="font-size:14px;color:var(--tinta-suave);margin:0 0 10px">Receba um aviso a cada marcação nova, mesmo com o painel fechado.</p>
+        <div class="aviso" id="avisoPush" hidden></div>
+        <button class="btn btn--principal btn--bloco" id="btnPush">Ativar notificações</button>
+      </div>
+
+      <div class="cartao">
         <div class="cartao__titulo">Acesso ao painel</div>
         <div class="campo">
           <label for="acessoUtilizador">Utilizador</label>
@@ -242,5 +249,6 @@
 <script src="assets/comum.js"></script>
 <script src="assets/painel.js"></script>
 <script src="assets/agenda.js"></script>
+<script src="assets/push.js"></script>
 </body>
 </html>
