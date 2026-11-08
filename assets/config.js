@@ -12,7 +12,7 @@
 // =====================================================================
 
 window.CONFIG = {
-  SUPABASE_URL: 'https://COLOQUE-AQUI.supabase.co',
-  SUPABASE_ANON_KEY: 'COLOQUE-AQUI-A-CHAVE-ANON',
+  SUPABASE_URL: 'https://iyohfkmmkdxgvremtorq.supabase.co',
+  SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml5b2hma21ta2R4Z3ZyZW10b3JxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQxNTY4MDEsImV4cCI6MjEwOTczMjgwMX0.z5qmhLY1GYky4J6Yf3pNFBiGPo8XJCkcXqoZ8ybVw1w',
   TZ: 'Europe/Lisbon',
 };
