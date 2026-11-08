@@ -39,8 +39,6 @@ Os dois podem ser executados mais do que uma vez sem estragar nada.
 
 Em **Authentication → Providers → Email**, desligue **Enable sign ups**.
 Assim mais ninguém se consegue registar sozinho — só esta conta entra no painel.
-Desligue também **Confirm email**, para que a troca de utilizador no painel não fique à espera de um email que nunca chega.
-
 ### 4. Ligar o site ao Supabase
 
 Em **Project Settings → API** copie:

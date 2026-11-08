@@ -77,10 +77,9 @@ $('btnGuardarAcesso').addEventListener('click', async () => {
 
   const { data } = await sb.auth.getSession();
   const emailAtual = data.session.user.email;
-  const alteracoes = {};
-  if (emailDoUtilizador(utilizador) !== emailAtual) alteracoes.email = emailDoUtilizador(utilizador);
-  if (nova) alteracoes.password = nova;
-  if (!Object.keys(alteracoes).length) {
+  const novoEmail = emailDoUtilizador(utilizador);
+  const trocarUtilizador = novoEmail !== emailAtual;
+  if (!trocarUtilizador && !nova) {
     aviso(el, 'Não há nada para alterar.', 'info');
     return;
   }
@@ -88,7 +87,13 @@ $('btnGuardarAcesso').addEventListener('click', async () => {
   btn.disabled = true;
   btn.textContent = 'A guardar…';
   const { error: erroAtual } = await sb.auth.signInWithPassword({ email: emailAtual, password: atual });
-  const { error } = erroAtual ? { error: null } : await sb.auth.updateUser(alteracoes);
+  let error = null;
+  if (!erroAtual && trocarUtilizador) {
+    // O Supabase recusa o domínio interno em updateUser; a troca é feita na base de dados.
+    ({ error } = await sb.rpc('alterar_utilizador', { p_email: novoEmail }));
+    if (!error) await sb.auth.refreshSession();
+  }
+  if (!erroAtual && !error && nova) ({ error } = await sb.auth.updateUser({ password: nova }));
   btn.disabled = false;
   btn.textContent = 'Guardar acesso';
 

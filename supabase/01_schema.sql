@@ -394,3 +394,36 @@ begin
     alter publication supabase_realtime add table public.marcacoes;
   end if;
 end $$;
+
+-- ---------------------------------------------------------------------
+-- Troca do utilizador do painel (o email interno da própria conta).
+-- O Supabase recusa o domínio interno em updateUser, por isso é feito aqui.
+-- ---------------------------------------------------------------------
+create or replace function public.alterar_utilizador(p_email text)
+returns void
+language plpgsql
+security definer
+set search_path = public, pg_temp
+as $$
+declare
+  v_email text := lower(trim(p_email));
+begin
+  if auth.uid() is null then
+    raise exception 'Sessão necessária';
+  end if;
+  if v_email !~ '^[a-z0-9._-]{3,40}@painel\.estetica-anabela\.invalid$' then
+    raise exception 'Utilizador inválido';
+  end if;
+  if exists (select 1 from auth.users where lower(email) = v_email and id <> auth.uid()) then
+    raise exception 'Utilizador já existe';
+  end if;
+
+  update auth.users set email = v_email, updated_at = now() where id = auth.uid();
+  update auth.identities
+     set identity_data = identity_data || jsonb_build_object('email', v_email), updated_at = now()
+   where user_id = auth.uid() and provider = 'email';
+end;
+$$;
+
+revoke all on function public.alterar_utilizador(text) from public, anon;
+grant execute on function public.alterar_utilizador(text) to authenticated;
