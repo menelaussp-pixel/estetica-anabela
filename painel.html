@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Painel — Estética Anabela</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#8c4458">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/estilo.css">
+</head>
+<body>
+
+<!-- ------------------------------ LOGIN ------------------------------ -->
+<div id="ecraLogin" class="pede-login">
+  <div style="text-align:center;margin-bottom:26px">
+    <div class="marca-nome" style="font-size:32px">Estética Anabela</div>
+    <div class="marca-sub">Painel de gestão</div>
+  </div>
+  <form id="formLogin" class="cartao">
+    <div class="campo">
+      <label for="loginEmail">Email</label>
+      <input id="loginEmail" type="email" autocomplete="username" required>
+    </div>
+    <div class="campo">
+      <label for="loginPass">Palavra-passe</label>
+      <input id="loginPass" type="password" autocomplete="current-password" required>
+    </div>
+    <div class="aviso" id="avisoLogin" hidden></div>
+    <button class="btn btn--principal btn--bloco" type="submit" id="btnEntrar">Entrar</button>
+  </form>
+</div>
+
+<!-- ------------------------------ APP ------------------------------ -->
+<div id="ecraApp" hidden>
+
+  <header class="topo">
+    <div class="topo__int">
+      <div>
+        <div class="marca-nome" style="font-size:22px" id="tituloPagina">Marcações</div>
+        <div class="marca-sub">Estética Anabela</div>
+      </div>
+      <button class="sino" id="sino" title="Marcações pendentes">🔔<span class="sino__bolha" id="sinoBolha" hidden>0</span></button>
+    </div>
+  </header>
+
+  <main class="env" style="padding-bottom:90px">
+
+    <!-- ---------------- MARCAÇÕES ---------------- -->
+    <section class="pagina ativa" id="pgMarcacoes">
+      <div class="campo" style="margin-top:16px">
+        <select id="periodo">
+          <option value="hoje">Hoje</option>
+          <option value="semana" selected>Esta semana</option>
+          <option value="mes">Este mês</option>
+          <option value="futuro">Tudo o que vem aí</option>
+          <option value="passado">Já passou</option>
+        </select>
+      </div>
+      <div class="campo"><input id="procuraMarc" type="search" placeholder="Filtrar por cliente…"></div>
+      <div class="filtros">
+        <button class="filtro" data-estado="pendente"  aria-pressed="false">Pendentes <strong id="cPendente">0</strong></button>
+        <button class="filtro" data-estado="confirmada" aria-pressed="true">Confirmadas <strong id="cConfirmada">0</strong></button>
+        <button class="filtro" data-estado="recusada"  aria-pressed="false">Recusadas <strong id="cRecusada">0</strong></button>
+      </div>
+      <div id="listaMarcacoes"><div class="carregar">A carregar…</div></div>
+    </section>
+
+    <!-- ---------------- CLIENTES ---------------- -->
+    <section class="pagina" id="pgClientes">
+      <div class="campo" style="margin-top:16px">
+        <input id="procuraCliente" type="search" placeholder="Procurar por nome ou telemóvel">
+      </div>
+      <div id="listaClientes"></div>
+    </section>
+
+    <!-- ---------------- SERVIÇOS ---------------- -->
+    <section class="pagina" id="pgServicos">
+      <div class="seps" role="tablist" style="margin-top:16px">
+        <button class="sep" role="tab" aria-selected="true" data-cat="senhoras">Senhoras</button>
+        <button class="sep" role="tab" aria-selected="false" data-cat="senhores">Senhores</button>
+      </div>
+
+      <div class="cartao">
+        <div class="cartao__titulo">Novo serviço</div>
+        <div class="campo"><input id="novoNome" type="text" placeholder="Nome do serviço"></div>
+        <div style="display:flex;gap:10px">
+          <div class="campo" style="flex:1"><label for="novoPreco">Preço (€)</label>
+            <input id="novoPreco" type="number" step="0.50" min="0" value="0"></div>
+          <div class="campo" style="flex:1"><label for="novoDur">Duração (min)</label>
+            <input id="novoDur" type="number" step="5" min="5" value="30"></div>
+        </div>
+        <button class="btn btn--principal btn--bloco" id="btnAdicionarServico">+ Adicionar serviço</button>
+      </div>
+
+      <p style="font-size:13px;color:var(--tinta-ténue);margin:0 0 10px">
+        Arraste pela pega ⠿ ou use as setas para mudar a ordem. A ordem aqui é a ordem que o cliente vê.
+      </p>
+      <div id="listaServicosAdmin"></div>
+    </section>
+
+    <!-- ---------------- PAINEL ---------------- -->
+    <section class="pagina" id="pgPainel">
+      <h2 style="margin:20px 0 12px;font-size:24px">Resumo do mês</h2>
+      <div class="estat">
+        <div class="estat__c"><div class="estat__v" id="estMarc">—</div><div class="estat__r">Marcações confirmadas</div></div>
+        <div class="estat__c"><div class="estat__v" id="estFat">—</div><div class="estat__r">Faturação prevista</div></div>
+        <div class="estat__c"><div class="estat__v" id="estPend">—</div><div class="estat__r">À espera de resposta</div></div>
+        <div class="estat__c"><div class="estat__v" id="estClientes">—</div><div class="estat__r">Clientes registados</div></div>
+      </div>
+      <div class="cartao">
+        <div class="cartao__titulo">Serviços mais pedidos (90 dias)</div>
+        <div id="topServicos"><div class="carregar">A calcular…</div></div>
+      </div>
+    </section>
+
+    <!-- ---------------- PERFIL ---------------- -->
+    <section class="pagina" id="pgPerfil">
+      <div class="cartao" style="margin-top:16px">
+        <div class="cartao__titulo">Avisos das tabelas de preços</div>
+        <div class="campo">
+          <label for="avisoS1">Texto no topo da tabela Senhoras</label>
+          <textarea id="avisoS1"></textarea>
+        </div>
+        <div class="campo">
+          <label for="avisoS2">Texto no topo da tabela Senhores</label>
+          <textarea id="avisoS2"></textarea>
+        </div>
+        <div class="campo">
+          <label for="defNome">Nome do salão</label>
+          <input id="defNome" type="text">
+        </div>
+        <div style="display:flex;gap:10px">
+          <div class="campo" style="flex:1"><label for="defIntervalo">Intervalo entre horas (min)</label>
+            <input id="defIntervalo" type="number" step="5" min="5"></div>
+          <div class="campo" style="flex:1"><label for="defAntec">Antecedência mínima (min)</label>
+            <input id="defAntec" type="number" step="15" min="0"></div>
+        </div>
+        <button class="btn btn--principal btn--bloco" id="btnGuardarDef">Guardar</button>
+      </div>
+
+      <div class="cartao">
+        <div class="cartao__titulo">Horário de funcionamento</div>
+        <div id="listaHorarios"></div>
+        <button class="btn btn--principal btn--bloco" id="btnGuardarHorario" style="margin-top:12px">Guardar horário</button>
+      </div>
+
+      <div class="cartao">
+        <div class="cartao__titulo">Fechar um período (férias, folga)</div>
+        <div style="display:flex;gap:10px">
+          <div class="campo" style="flex:1"><label for="bloqIni">De</label>
+            <input id="bloqIni" type="datetime-local"></div>
+          <div class="campo" style="flex:1"><label for="bloqFim">Até</label>
+            <input id="bloqFim" type="datetime-local"></div>
+        </div>
+        <div class="campo"><input id="bloqMotivo" type="text" placeholder="Motivo (opcional)"></div>
+        <button class="btn btn--fantasma btn--bloco" id="btnBloquear">Fechar este período</button>
+        <div id="listaBloqueios" style="margin-top:12px"></div>
+      </div>
+
+      <div class="cartao">
+        <div class="cartao__titulo">Link para dar aos clientes</div>
+        <div class="campo"><input id="linkPublico" type="text" readonly></div>
+        <button class="btn btn--fantasma btn--bloco" id="btnCopiarLink">Copiar link</button>
+      </div>
+
+      <button class="btn btn--perigo btn--bloco" id="btnSair">Terminar sessão</button>
+      <div class="rodape">Estética Anabela</div>
+    </section>
+
+  </main>
+
+  <nav class="barra-baixo">
+    <button data-pg="pgMarcacoes" aria-current="page"><span>📅</span>Marcações</button>
+    <button data-pg="pgClientes"><span>👥</span>Clientes</button>
+    <button data-pg="pgServicos"><span>💼</span>Serviços</button>
+    <button data-pg="pgPainel"><span>📊</span>Painel</button>
+    <button data-pg="pgPerfil"><span>⚙️</span>Perfil</button>
+  </nav>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="assets/config.js"></script>
+<script src="assets/comum.js"></script>
+<script src="assets/painel.js"></script>
+</body>
+</html>

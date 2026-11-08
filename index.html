@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Estética Anabela — Marcações</title>
+<meta name="description" content="Marque o seu serviço na Estética Anabela de forma simples e rápida.">
+<meta name="theme-color" content="#8c4458">
+<link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/estilo.css">
+</head>
+<body>
+
+<header class="topo">
+  <div class="topo__int">
+    <div>
+      <div class="marca-nome" id="nomeSalao">Estética Anabela</div>
+      <div class="marca-sub">Marcações online</div>
+    </div>
+  </div>
+</header>
+
+<main class="env">
+
+  <!-- ETAPA 1: escolher serviços -->
+  <section id="etapaServicos">
+    <div class="heroi">
+      <h1>Escolha os seus serviços</h1>
+      <p>Pode escolher mais do que um. No fim, veja as horas disponíveis e marque.</p>
+    </div>
+
+    <div class="seps" role="tablist">
+      <button class="sep" role="tab" id="sepSenhoras" aria-selected="true" data-cat="senhoras">Senhoras</button>
+      <button class="sep" role="tab" id="sepSenhores" aria-selected="false" data-cat="senhores">Senhores</button>
+    </div>
+
+    <div class="nota-tabela" id="notaTabela"></div>
+    <div id="listaServicos" class="servicos"><div class="carregar">A carregar os serviços…</div></div>
+    <div class="rodape">Estética Anabela</div>
+  </section>
+
+  <!-- ETAPA 2: escolher dia e hora -->
+  <section id="etapaHorario" hidden>
+    <div style="padding:20px 0 4px">
+      <button class="btn btn--fantasma btn--pequeno" id="voltarServicos">← Alterar serviços</button>
+    </div>
+    <h1 style="font-size:30px;margin:14px 0 6px">Quando lhe dá jeito?</h1>
+    <p style="color:var(--tinta-suave);margin:0 0 18px;font-size:15px" id="resumoEscolha"></p>
+
+    <div class="cartao">
+      <div class="cal__topo">
+        <button class="cal__nav" id="mesAnterior" aria-label="Mês anterior">‹</button>
+        <div class="cal__mes" id="mesAtual"></div>
+        <button class="cal__nav" id="mesSeguinte" aria-label="Mês seguinte">›</button>
+      </div>
+      <div class="cal__grelha" id="calCabecalho"></div>
+      <div class="cal__grelha" id="calDias"></div>
+    </div>
+
+    <div class="cartao" id="cartaoHoras" hidden>
+      <div class="cartao__titulo">Horários disponíveis</div>
+      <div id="listaHoras"></div>
+    </div>
+
+    <div class="cartao" id="cartaoForm" hidden>
+      <div class="cartao__titulo">Os seus dados</div>
+      <div class="resumo" id="resumoFinal"></div>
+
+      <form id="formMarcacao" novalidate>
+        <div class="campo">
+          <label for="campoNome">O seu nome</label>
+          <input id="campoNome" type="text" autocomplete="name" required maxlength="80" placeholder="Nome">
+        </div>
+        <div class="campo">
+          <label for="campoTel">Telemóvel</label>
+          <div class="tel">
+            <input class="tel__indicativo" id="campoInd" type="text" value="+351" maxlength="5" inputmode="tel" aria-label="Indicativo">
+            <input id="campoTel" type="tel" autocomplete="tel" required inputmode="numeric" maxlength="15" placeholder="912 345 678">
+          </div>
+          <div class="campo__ajuda">Usado pelo salão para confirmar a sua marcação.</div>
+        </div>
+        <div class="campo">
+          <label for="campoNota">Nota para o salão (opcional)</label>
+          <textarea id="campoNota" maxlength="500" placeholder="Alguma preferência ou informação para a equipa?"></textarea>
+        </div>
+        <div class="aviso" id="avisoForm" hidden></div>
+        <button class="btn btn--principal btn--bloco" type="submit" id="btnConfirmar">Confirmar marcação</button>
+      </form>
+    </div>
+
+    <div class="rodape">Estética Anabela</div>
+  </section>
+
+  <!-- ETAPA 3: feito -->
+  <section id="etapaFeito" hidden>
+    <div class="heroi" style="padding-top:56px">
+      <div style="font-size:52px">✓</div>
+      <h1>Pedido enviado</h1>
+      <p>O salão vai confirmar a sua marcação. Recebe depois uma mensagem de confirmação.</p>
+    </div>
+    <div class="cartao"><div class="resumo" id="resumoFeito"></div></div>
+    <button class="btn btn--fantasma btn--bloco" id="novaMarcacao">Fazer outra marcação</button>
+    <div class="rodape">Estética Anabela</div>
+  </section>
+
+</main>
+
+<!-- barra do carrinho -->
+<div class="carrinho" id="carrinho">
+  <div class="carrinho__int">
+    <div class="carrinho__resumo">
+      <div class="carrinho__linha1" id="carrinhoTotal">0,00 €</div>
+      <div class="carrinho__linha2" id="carrinhoDetalhe"></div>
+    </div>
+    <button class="btn btn--principal" id="btnContinuar">Continuar</button>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="assets/config.js"></script>
+<script src="assets/comum.js"></script>
+<script src="assets/cliente.js"></script>
+</body>
+</html>
