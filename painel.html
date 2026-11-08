@@ -21,8 +21,8 @@
   </div>
   <form id="formLogin" class="cartao">
     <div class="campo">
-      <label for="loginEmail">Email</label>
-      <input id="loginEmail" type="email" autocomplete="username" required>
+      <label for="loginUtilizador">Utilizador</label>
+      <input id="loginUtilizador" type="text" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" required>
     </div>
     <div class="campo">
       <label for="loginPass">Palavra-passe</label>
@@ -158,6 +158,28 @@
         <div class="campo"><input id="bloqMotivo" type="text" placeholder="Motivo (opcional)"></div>
         <button class="btn btn--fantasma btn--bloco" id="btnBloquear">Fechar este período</button>
         <div id="listaBloqueios" style="margin-top:12px"></div>
+      </div>
+
+      <div class="cartao">
+        <div class="cartao__titulo">Acesso ao painel</div>
+        <div class="campo">
+          <label for="acessoUtilizador">Utilizador</label>
+          <input id="acessoUtilizador" type="text" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false">
+        </div>
+        <div class="campo">
+          <label for="acessoNova">Nova palavra-passe (deixe em branco para manter)</label>
+          <input id="acessoNova" type="password" autocomplete="new-password">
+        </div>
+        <div class="campo">
+          <label for="acessoRepetir">Repetir a nova palavra-passe</label>
+          <input id="acessoRepetir" type="password" autocomplete="new-password">
+        </div>
+        <div class="campo">
+          <label for="acessoAtual">Palavra-passe atual (obrigatória para guardar)</label>
+          <input id="acessoAtual" type="password" autocomplete="current-password">
+        </div>
+        <div class="aviso" id="avisoAcesso" hidden></div>
+        <button class="btn btn--principal btn--bloco" id="btnGuardarAcesso">Guardar acesso</button>
       </div>
 
       <div class="cartao">

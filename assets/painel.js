@@ -22,6 +22,13 @@ const TITULOS = {
 // ---------------------------------------------------------------------
 // Sessão
 // ---------------------------------------------------------------------
+// O Supabase exige um email em cada conta. A dona só vê um nome de utilizador;
+// o email é construído a partir dele, num domínio reservado que não recebe correio.
+const DOMINIO_INTERNO = 'painel.estetica-anabela.invalid';
+const normalizarUtilizador = (u) => String(u || '').trim().toLowerCase();
+const emailDoUtilizador = (u) => `${normalizarUtilizador(u)}@${DOMINIO_INTERNO}`;
+const utilizadorDoEmail = (email) => String(email || '').split('@')[0];
+
 $('formLogin').addEventListener('submit', async (e) => {
   e.preventDefault();
   aviso($('avisoLogin'), '');
@@ -29,13 +36,71 @@ $('formLogin').addEventListener('submit', async (e) => {
   $('btnEntrar').textContent = 'A entrar…';
 
   const { error } = await sb.auth.signInWithPassword({
-    email: $('loginEmail').value.trim(),
+    email: emailDoUtilizador($('loginUtilizador').value),
     password: $('loginPass').value,
   });
 
   $('btnEntrar').disabled = false;
   $('btnEntrar').textContent = 'Entrar';
-  if (error) aviso($('avisoLogin'), 'Email ou palavra-passe incorretos.');
+  if (error) aviso($('avisoLogin'), 'Utilizador ou palavra-passe incorretos.');
+});
+
+$('btnGuardarAcesso').addEventListener('click', async () => {
+  const el = $('avisoAcesso');
+  const btn = $('btnGuardarAcesso');
+  aviso(el, '');
+
+  const utilizador = normalizarUtilizador($('acessoUtilizador').value);
+  const atual = $('acessoAtual').value;
+  const nova = $('acessoNova').value;
+
+  if (!/^[a-z0-9._-]{3,40}$/.test(utilizador)) {
+    aviso(el, 'O utilizador deve ter pelo menos 3 caracteres: letras sem acentos, números, ponto, hífen ou sublinhado.');
+    return;
+  }
+  if (nova && nova.length < 8) {
+    aviso(el, 'A nova palavra-passe deve ter pelo menos 8 caracteres.');
+    return;
+  }
+  if (nova !== $('acessoRepetir').value) {
+    aviso(el, 'As duas palavras-passe novas não coincidem.');
+    return;
+  }
+  if (!atual) {
+    aviso(el, 'Escreva a palavra-passe atual para guardar.');
+    return;
+  }
+  if (nova && nova === atual) {
+    aviso(el, 'A nova palavra-passe tem de ser diferente da atual.');
+    return;
+  }
+
+  const { data } = await sb.auth.getSession();
+  const emailAtual = data.session.user.email;
+  const alteracoes = {};
+  if (emailDoUtilizador(utilizador) !== emailAtual) alteracoes.email = emailDoUtilizador(utilizador);
+  if (nova) alteracoes.password = nova;
+  if (!Object.keys(alteracoes).length) {
+    aviso(el, 'Não há nada para alterar.', 'info');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'A guardar…';
+  const { error: erroAtual } = await sb.auth.signInWithPassword({ email: emailAtual, password: atual });
+  const { error } = erroAtual ? { error: null } : await sb.auth.updateUser(alteracoes);
+  btn.disabled = false;
+  btn.textContent = 'Guardar acesso';
+
+  if (erroAtual) {
+    aviso(el, 'A palavra-passe atual está incorreta.');
+  } else if (error) {
+    aviso(el, 'Não foi possível guardar. Tente novamente.');
+  } else {
+    $('acessoUtilizador').value = utilizador;
+    ['acessoNova', 'acessoRepetir', 'acessoAtual'].forEach((id) => { $(id).value = ''; });
+    aviso(el, 'Acesso atualizado. Use estes dados da próxima vez que entrar.', 'ok');
+  }
 });
 
 $('btnSair').addEventListener('click', async () => {
@@ -63,6 +128,8 @@ async function arrancar() {
   jaArrancou = true;
 
   $('linkPublico').value = location.href.replace(/painel\.html.*$/, '');
+  const { data: dadosSessao } = await sb.auth.getSession();
+  $('acessoUtilizador').value = utilizadorDoEmail(dadosSessao.session?.user?.email);
 
   await Promise.all([carregarDefinicoes(), carregarServicos(), carregarHorarios()]);
   await carregarMarcacoes();

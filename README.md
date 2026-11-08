@@ -33,12 +33,13 @@ Os dois podem ser executados mais do que uma vez sem estragar nada.
 
 **Authentication** → **Users** → **Add user** → **Create new user**
 
-- Email: o email da Anabela
+- Email: `<utilizador>@painel.estetica-anabela.invalid` (o painel só pede o `<utilizador>`; este domínio é reservado e não recebe correio)
 - Password: uma palavra-passe à escolha
 - Ligue **Auto Confirm User** (senão a conta fica à espera de confirmação por email)
 
 Em **Authentication → Providers → Email**, desligue **Enable sign ups**.
 Assim mais ninguém se consegue registar sozinho — só esta conta entra no painel.
+Desligue também **Confirm email**, para que a troca de utilizador no painel não fique à espera de um email que nunca chega.
 
 ### 4. Ligar o site ao Supabase
 
@@ -110,6 +111,7 @@ envio automático grátis são não-oficiais e dão banimento do número.
 - Horário de cada dia da semana
 - Fechar períodos (férias, folgas)
 - Intervalo entre horas e antecedência mínima de marcação
+- O utilizador e a palavra-passe de acesso ao painel (**Perfil → Acesso ao painel**)
 
 ---
 
