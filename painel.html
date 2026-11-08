@@ -50,7 +50,32 @@
 
     <!-- ---------------- MARCAÇÕES ---------------- -->
     <section class="pagina ativa" id="pgMarcacoes">
-      <div class="campo" style="margin-top:16px">
+      <div class="seps" role="tablist" style="margin:16px 0 10px">
+        <button class="sep" role="tab" aria-selected="false" data-vista="geral">Visão geral</button>
+        <button class="sep" role="tab" aria-selected="true" data-vista="calendario">Calendário</button>
+      </div>
+
+      <div id="vistaCalendario">
+        <div class="seps" role="tablist" style="margin:0 0 12px">
+          <button class="sep" role="tab" aria-selected="false" data-modo="dia">Dia</button>
+          <button class="sep" role="tab" aria-selected="true" data-modo="semana">Semana</button>
+          <button class="sep" role="tab" aria-selected="false" data-modo="mes">Mês</button>
+        </div>
+        <div class="cartao ag">
+          <div class="ag__topo">
+            <button class="cal__nav" id="agAnterior" aria-label="Anterior">‹</button>
+            <div class="ag__centro">
+              <span class="ag__titulo" id="agTitulo">A carregar…</span>
+              <button class="ag__hoje" id="agHoje">Hoje</button>
+            </div>
+            <button class="cal__nav" id="agSeguinte" aria-label="Seguinte">›</button>
+          </div>
+          <div id="agCorpo"></div>
+        </div>
+      </div>
+
+      <div id="vistaGeral" hidden>
+      <div class="campo">
         <select id="periodo">
           <option value="hoje">Hoje</option>
           <option value="semana" selected>Esta semana</option>
@@ -66,6 +91,7 @@
         <button class="filtro" data-estado="recusada"  aria-pressed="false">Recusadas <strong id="cRecusada">0</strong></button>
       </div>
       <div id="listaMarcacoes"><div class="carregar">A carregar…</div></div>
+      </div>
     </section>
 
     <!-- ---------------- CLIENTES ---------------- -->
@@ -201,11 +227,20 @@
     <button data-pg="pgPainel"><span>📊</span>Painel</button>
     <button data-pg="pgPerfil"><span>⚙️</span>Perfil</button>
   </nav>
+
+  <div class="folha" id="folhaMarc" hidden>
+    <div class="folha__fundo" id="folhaFundo"></div>
+    <div class="folha__caixa" role="dialog" aria-modal="true" aria-labelledby="folhaTitulo">
+      <button class="folha__fechar" id="folhaFechar" aria-label="Fechar">✕</button>
+      <div id="folhaConteudo"></div>
+    </div>
+  </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script src="assets/config.js"></script>
 <script src="assets/comum.js"></script>
 <script src="assets/painel.js"></script>
+<script src="assets/agenda.js"></script>
 </body>
 </html>

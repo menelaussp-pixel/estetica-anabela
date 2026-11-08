@@ -134,6 +134,7 @@ assets/
   comum.js              funções partilhadas
   cliente.js
   painel.js
+  agenda.js             calendário do painel (dia, semana, mês)
 supabase/
   01_schema.sql         tabelas, segurança (RLS) e funções
   02_dados.sql          serviços, horários e avisos iniciais

@@ -160,6 +160,7 @@ document.querySelectorAll('.barra-baixo button').forEach((b) => {
 
 $('sino').addEventListener('click', () => {
   document.querySelector('[data-pg="pgMarcacoes"]').click();
+  mostrarVistaMarc('geral');
   app.estadosAtivos = new Set(['pendente']);
   $('periodo').value = 'futuro';
   sincronizarFiltros();
@@ -226,6 +227,7 @@ async function carregarMarcacoes() {
   app.marcacoes = data || [];
   desenharMarcacoes();
   atualizarSino();
+  carregarAgenda();
 }
 
 async function atualizarSino() {
@@ -268,7 +270,7 @@ function desenharMarcacoes() {
     ${ms.map(cartaoMarcacao).join('')}`).join('');
 }
 
-function cartaoMarcacao(m) {
+function acoesMarcacao(m) {
   const servicos = (m.marcacao_servicos || []).map((s) => s.nome).join(' · ') || '—';
   const msgConf = `Olá ${m.nome}! A sua marcação na Estética Anabela está confirmada para ${dataDe(m.inicio)} às ${horaDe(m.inicio)} (${servicos}). Até breve!`;
   const msgRec = `Olá ${m.nome}. Infelizmente não conseguimos aceitar a marcação de ${dataDe(m.inicio)} às ${horaDe(m.inicio)}. Pode escolher outro horário no nosso site. Obrigada!`;
@@ -292,6 +294,12 @@ function cartaoMarcacao(m) {
   } else {
     acoes = `<button class="btn btn--fantasma btn--pequeno" data-acao="pendente" data-id="${m.id}">Repor como pendente</button>`;
   }
+  return acoes;
+}
+
+function cartaoMarcacao(m) {
+  const servicos = (m.marcacao_servicos || []).map((s) => s.nome).join(' · ') || '—';
+  const acoes = acoesMarcacao(m);
 
   return `
     <div class="marcacao">
@@ -314,14 +322,22 @@ function cartaoMarcacao(m) {
     </div>`;
 }
 
-$('listaMarcacoes').addEventListener('click', async (e) => {
+async function tratarAcaoMarcacao(e) {
   const b = e.target.closest('button[data-acao]');
   if (!b) return;
   if (b.dataset.acao === 'cancelada' && !confirm('Cancelar esta marcação?')) return;
   b.disabled = true;
-  await sb.from('marcacoes').update({ estado: b.dataset.acao }).eq('id', b.dataset.id);
+  const { error } = await sb.from('marcacoes').update({ estado: b.dataset.acao }).eq('id', b.dataset.id);
+  if (error) {
+    b.disabled = false;
+    alert(error.message);
+    return;
+  }
+  fecharFolha();
   carregarMarcacoes();
-});
+}
+
+$('listaMarcacoes').addEventListener('click', tratarAcaoMarcacao);
 
 $('periodo').addEventListener('change', carregarMarcacoes);
 $('procuraMarc').addEventListener('input', desenharMarcacoes);
